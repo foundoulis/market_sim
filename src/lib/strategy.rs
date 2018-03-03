@@ -8,6 +8,7 @@ use self::rand::{thread_rng, Rng};
 #[derive(Debug)]
 pub struct Strategy {
     R: HashMap<Vec<bool>, bool>,
+    successes: u64,
 }
 impl Strategy {
     pub fn new() -> Strategy {
@@ -23,5 +24,8 @@ impl Strategy {
             self.R.insert(hist.clone(), new_value);
             return new_value;
         }
+    }
+    pub fn inc_succ(&mut self) {
+        self.successes += 1;
     }
 }

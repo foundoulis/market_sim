@@ -5,7 +5,6 @@ use lib::strategy::Strategy;
 #[derive(Debug)]
 pub struct Agent {
     strategies: Vec<Strategy>, // A collection of strategies
-    history: Vec<u64>, // A number of successes for each strategy.
     num_strat: u64,
 }
 impl Agent {
