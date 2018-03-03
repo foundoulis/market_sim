@@ -1,0 +1,6 @@
+[package]
+name = "market-sim"
+version = "0.1.0"
+authors = ["Derek Foundoulis <derek@foundoulis.io>"]
+
+[dependencies]
