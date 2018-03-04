@@ -14,9 +14,10 @@ impl Strategy {
     pub fn new() -> Strategy {
         Strategy {
             R: HashMap::new(),
+            successes: 0
         }
     }
-    pub fn get(&mut self, hist: &Vec<bool>) -> bool {
+    pub fn get_bid(&mut self, hist: &Vec<bool>) -> bool {
         if self.R.contains_key(hist) {
             return self.R.get(hist).unwrap().to_owned();
         } else {
@@ -24,6 +25,9 @@ impl Strategy {
             self.R.insert(hist.clone(), new_value);
             return new_value;
         }
+    }
+    pub fn get_succ(&self) -> u64{
+        return self.successes;
     }
     pub fn inc_succ(&mut self) {
         self.successes += 1;

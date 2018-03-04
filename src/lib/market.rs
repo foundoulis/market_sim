@@ -36,6 +36,7 @@ impl MarketHistory {
     pub fn new(number_of_agents: u64) -> MarketHistory {
         MarketHistory {
             num_agents: number_of_agents,
+            
         }
     }
 }
