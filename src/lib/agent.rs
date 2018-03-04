@@ -21,13 +21,14 @@ impl Agent {
     pub fn make_descision(&mut self, hist: &Vec<bool>) -> bool {
         let mut best_index: usize = 0; // index of the best strategy
         for i in 0..self.num_strat {
-            if self.strategies[i as usize].get_succ() > self.strategies[best_index].get_succ() {
-                best_index = i as usize;
+            let i = i as usize;
+            if self.strategies[i].get_succ() > self.strategies[best_index].get_succ() {
+                best_index = i;
             }
         }
         return self.strategies[best_index].get_bid(hist);
     }
-    pub fn update_history() { // Update whether or not a given strategy would have worked.
-
+    pub fn update_history(&mut self, hist: &Vec<bool>) { // Update whether or not a given strategy would have worked
+        
     }
 }
