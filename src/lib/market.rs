@@ -6,7 +6,7 @@ use self::rand::{thread_rng, Rng};
 
 // Market
 #[derive(Debug)]
-struct Market {
+pub struct Market {
     num_agents: u64,
     agents: Vec<Agent>,
 
@@ -68,8 +68,10 @@ impl MarketHistory {
     pub fn new(number_of_agents: u64, history_length: u64) -> MarketHistory {
         let mut history: Vec<Vec<bool>> = vec![vec![]];
         // To ensure the history is never empty.
-        for _ in 0..number_of_agents {
-            history[0].push(thread_rng().gen());
+        for i in 0..history_length {
+            for _ in 0..number_of_agents {
+                history[i as usize].push(thread_rng().gen());
+            }
         }
         MarketHistory {
             num_agents: number_of_agents,
