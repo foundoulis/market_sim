@@ -12,7 +12,8 @@ struct Market {
 impl Market {
     pub fn new(number_of_agents: u64, number_of_strategies: u64, history_length: u64) -> Market {
         let mut agentz = Vec::with_capacity(number_of_agents as usize);
-        for i in number_of_agents {
+        for i in 0..number_of_agents {
+            let i = i as usize;
             agentz[i] = Agent::new(number_of_strategies);
         }
         Market {
@@ -34,15 +35,19 @@ impl Market {
             }
         }
 
-        // Determine the minority position
-
+        // Determine the minority position based upon market response.
+        let minority = if minority_position < 0 {
+            false
+        } else {
+            true
+        };
 
         // Tell each agent how they did
         for agent in self.agents {
-            agent.update_history(self.hist);
+            agent.update_history(self.hist, minority);
         }
     }
-    pub fn tick_forward_n(&mut self, n: u64) {
+    pub fn tick_forward_n_times(&mut self, n: u64) {
         for _ in 0..n {
             self.tick_forward();
         }

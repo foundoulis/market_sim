@@ -28,7 +28,7 @@ impl Agent {
         }
         return self.strategies[best_index].get_bid(hist);
     }
-    pub fn update_history(&mut self, hist: &Vec<bool>) { // Update whether or not a given strategy would have worked
+    pub fn update_history(&mut self, hist: &Vec<bool>, minority_position: bool) { // Update whether or not a given strategy would have worked
         
     }
 }
