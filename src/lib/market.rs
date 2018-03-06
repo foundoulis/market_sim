@@ -27,24 +27,29 @@ impl Market {
         }
     }
     pub fn tick(&mut self) {
+        let mut new_history: Vec<bool> = Vec::with_capacity(self.num_agents as usize);
         let mut minority_position = 0;
 
         // As each of the agents to trade
         for agent in &mut self.agents {
-            if agent.make_descision(self.hist.to_worker()) {
+            let agent_choice = agent.make_descision(self.hist.to_worker());
+            if agent_choice {
                 minority_position += 1;
             } else {
                 minority_position -= 1;
             }
+            new_history.push(agent_choice);
         }
+
+        self.hist.push_hist(&new_history);
 
         println!("Price this tick: {}", minority_position);
 
         // Determine the minority position based upon market response.
         let minority = if minority_position < 0 {
-            false
-        } else {
             true
+        } else {
+            false
         };
 
         // Tell each agent how they did
