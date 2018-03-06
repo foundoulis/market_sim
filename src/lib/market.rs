@@ -9,8 +9,12 @@ use self::rand::{thread_rng, Rng};
 pub struct Market {
     num_agents: u64,
     agents: Vec<Agent>,
-
+    tick: u64,
     hist: MarketHistory,
+
+    prices: Vec<i32>,
+    sum: i64,
+    average_price: f64,
 }
 impl Market {
     pub fn new(number_of_agents: u64, number_of_strategies: u64, history_length: u64) -> Market {
@@ -22,8 +26,11 @@ impl Market {
         Market {
             num_agents: number_of_agents,
             agents: agentz,
-
+            tick: 0,
             hist: MarketHistory::new(number_of_agents, history_length),
+            prices: Vec::new(),
+            sum: 0,
+            average_price: 0f64,
         }
     }
     pub fn tick(&mut self) {
@@ -40,10 +47,11 @@ impl Market {
             }
             new_history.push(agent_choice);
         }
-
+        
+        // Append new history
         self.hist.push_hist(&new_history);
-
-        println!("Price this tick: {}", minority_position);
+        // Append to price history
+        self.prices.push(minority_position);
 
         // Determine the minority position based upon market response.
         let minority = if minority_position < 0 {
@@ -56,11 +64,19 @@ impl Market {
         for agent in &mut self.agents {
             agent.update_history(self.hist.to_worker(), minority);
         }
+
+        self.tick += 1;
+        self.sum += minority_position as i64;
+        self.average_price = (self.sum as f64)/(self.tick as f64);
     }
     pub fn tick_n(&mut self, n: u64) {
         for _ in 0..n {
             self.tick();
         }
+        //println!("Prices for era {} to {}: {:?}", self.tick - n, self.tick, self.average_price);
+    }
+    pub fn get_avg_price(&self) -> f64{
+        return self.average_price;
     }
 }
 
