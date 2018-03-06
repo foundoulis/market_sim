@@ -29,6 +29,10 @@ impl Agent {
         return self.strategies[best_index].get_bid(hist);
     }
     pub fn update_history(&mut self, hist: &Vec<bool>, minority_position: bool) { // Update whether or not a given strategy would have worked
-        
+        for strat in &mut self.strategies {
+            if minority_position != strat.get_bid(hist) {
+                strat.inc_succ();
+            }
+        }
     }
 }
