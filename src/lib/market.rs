@@ -28,7 +28,7 @@ impl Market {
 
         // As each of the agents to trade
         for agent in self.agents {
-            if agent.make_descision(self.hist) {
+            if agent.make_descision(&self.hist) {
                 minority_position += 1;
             } else {
                 minority_position -= 1;
