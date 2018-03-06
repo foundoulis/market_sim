@@ -5,7 +5,7 @@ use lib::market::*;
 use std::thread;
 
 fn main() {
-    let num_agents = 101;
+    let num_agents = 5;
     let num_strats = 5;
     let history_len = 100;
 
@@ -14,9 +14,7 @@ fn main() {
     for i in 0..8 {
         values.push(thread::Builder::new().name(format!("{}", i).to_string()).spawn(move || {
             let mut mark: Market = Market::new(num_agents, num_strats, history_len);
-            for _ in 0..10 {
-                mark.tick_n(100);
-            }
+            mark.tick_n(1_000);
             Ok(mark.get_avg_price())
         }).unwrap());
     }

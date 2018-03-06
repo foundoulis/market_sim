@@ -5,4 +5,3 @@ authors = ["Derek Foundoulis <derek@foundoulis.io>"]
 
 [dependencies]
 rand = "0.4.2"
-
