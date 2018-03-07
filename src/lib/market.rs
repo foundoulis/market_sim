@@ -15,6 +15,8 @@ pub struct Market {
     prices: Vec<i32>,
     sum: i64,
     average_price: f64,
+    max_price: i32, 
+    min_price: i32,
 }
 impl Market {
     pub fn new(number_of_agents: u64, number_of_strategies: u64, history_length: u64) -> Market {
@@ -30,6 +32,8 @@ impl Market {
             prices: Vec::new(),
             sum: 0,
             average_price: 0f64,
+            min_price: i32::max_value(),
+            max_price: i32::min_value(),
         }
     }
     pub fn tick(&mut self) {
@@ -64,9 +68,15 @@ impl Market {
             agent.update_history(self.hist.to_worker(), minority);
         }
 
+        // Data tracking stuff.
         self.tick += 1;
         self.sum += minority_position as i64;
         self.average_price = (self.sum as f64)/(self.tick as f64);
+        if minority_position > self.max_price {
+            self.max_price = minority_position;
+        } else if minority_position < self.min_price {
+            self.min_price = minority_position;
+        }
     }
     pub fn tick_n(&mut self, n: u64) {
         for _ in 0..n {
@@ -76,6 +86,12 @@ impl Market {
     }
     pub fn get_avg_price(&self) -> f64{
         return self.average_price;
+    }
+    pub fn get_min_price(&self) -> i32{
+        return self.min_price;
+    }
+    pub fn get_max_price(&self) -> i32{
+        return self.max_price;
     }
 }
 
