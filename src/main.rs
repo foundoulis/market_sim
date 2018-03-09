@@ -4,31 +4,43 @@ extern crate rustyline;
 pub mod lib;
 
 use lib::market::*;
-use std::env;
 use std::thread;
 
 fn main() {
+    let mut rl = rustyline::Editor::<()>::new();
+    if let Err(_) = rl.load_history("market-sim.txt") {
+        println!("No previous history found.");
+    }
+    parse_line(&mut rl);
+    rl.save_history("market-sim.txt").unwrap();
+}
+
+fn parse_line(rl: &mut rustyline::Editor<()>) {
     loop {
-        let mut rl = rustyline::Editor::<()>::new();
-        let readline = rl.readline(">> ");
+        let readline = rl.readline("|)]}> ");
         match readline {
             Ok(line) => {
-                println!("{}", line.to_string());
-                if line.to_string() == "quit" {
-                    break;
+                rl.add_history_entry(&line);
+                if line == "quit" {
+                    break
+                } else if line == "run" {
+                    temp();
+                } else {
+                    println!("{}", line);
                 }
-                },
-            Err(_) => println!("No input"),
+            },
+            Err(_) => {
+                println!("No input, \"quit\" to exit");
+            },
         }
     }
 }
 
 fn temp() {
-    let args: Vec<String> = env::args().collect();
-    let num_agents = args[1].parse::<u64>().unwrap_or(5);
-    let num_strats = args[2].parse::<u64>().unwrap_or(3);
-    let history_len = args[3].parse::<u64>().unwrap_or(10);
-    let iterations = args[4].parse::<u64>().unwrap_or(1000);
+    let num_agents = 5;
+    let num_strats = 3;
+    let history_len = 100;
+    let iterations = 10_000;
 
     let mut values: Vec<std::thread::JoinHandle<Result<(f64, i32, i32), ()>>> = Vec::new();
 
@@ -51,8 +63,10 @@ fn temp() {
     println!("Prices: ");
     for t in values {
         match t.join().unwrap() {
-            Ok(s) => println!("av: {}\tmax: {}\tmin: {}", s.0, s.1, s.2),
-            Err(()) => {}
+            Ok(s) => println!("av: {:.3}\tmax: {}\tmin: {}", s.0, s.1, s.2),
+            Err(()) => {
+                println!("There was an error processing the output.", );
+            }
         }
     }
 }
