@@ -14,7 +14,7 @@ impl Strategy {
     pub fn new() -> Strategy {
         Strategy {
             r: HashMap::new(),
-            successes: 0
+            successes: 0,
         }
     }
     pub fn get_bid(&mut self, hist: &Vec<bool>) -> bool {
@@ -26,7 +26,7 @@ impl Strategy {
             return new_value;
         }
     }
-    pub fn get_succ(&self) -> u64{
+    pub fn get_succ(&self) -> u64 {
         return self.successes;
     }
     pub fn inc_succ(&mut self) {

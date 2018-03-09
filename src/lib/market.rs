@@ -15,7 +15,7 @@ pub struct Market {
     prices: Vec<i32>,
     sum: i64,
     average_price: f64,
-    max_price: i32, 
+    max_price: i32,
     min_price: i32,
 }
 impl Market {
@@ -50,18 +50,14 @@ impl Market {
             }
             new_history.push(agent_choice);
         }
-        
+
         // Append new history
         self.hist.push_hist(&new_history);
         // Append to price history
         self.prices.push(minority_position);
 
         // Determine the minority position based upon market response.
-        let minority = if minority_position < 0 {
-            true
-        } else {
-            false
-        };
+        let minority = if minority_position < 0 { true } else { false };
 
         // Tell each agent how they did
         for agent in &mut self.agents {
@@ -71,7 +67,7 @@ impl Market {
         // Data tracking stuff.
         self.tick += 1;
         self.sum += minority_position as i64;
-        self.average_price = (self.sum as f64)/(self.tick as f64);
+        self.average_price = (self.sum as f64) / (self.tick as f64);
         if minority_position > self.max_price {
             self.max_price = minority_position;
         } else if minority_position < self.min_price {
@@ -84,13 +80,13 @@ impl Market {
         }
         //println!("Prices for era {} to {}: {:?}", self.tick - n, self.tick, self.average_price);
     }
-    pub fn get_avg_price(&self) -> f64{
+    pub fn get_avg_price(&self) -> f64 {
         return self.average_price;
     }
-    pub fn get_min_price(&self) -> i32{
+    pub fn get_min_price(&self) -> i32 {
         return self.min_price;
     }
-    pub fn get_max_price(&self) -> i32{
+    pub fn get_max_price(&self) -> i32 {
         return self.max_price;
     }
 }
@@ -99,8 +95,8 @@ impl Market {
 #[derive(Debug)]
 struct MarketHistory {
     num_agents: u64, // Number of agents.
-    hist_len: u64, // How far back each agent should be able to see when making a descision
-    history: Vec<Vec<bool>>
+    hist_len: u64,   // How far back each agent should be able to see when making a descision
+    history: Vec<Vec<bool>>,
 }
 impl MarketHistory {
     pub fn new(number_of_agents: u64, history_length: u64) -> MarketHistory {

@@ -5,3 +5,4 @@ authors = ["Derek Foundoulis <derek@foundoulis.io>"]
 
 [dependencies]
 rand = "0.4.2"
+rustyline = "1.0.0"
