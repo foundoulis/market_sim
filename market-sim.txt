@@ -19,3 +19,9 @@ run
 quit
 run
 quit
+run
+quit
+run
+quit
+run
+quit

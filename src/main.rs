@@ -24,7 +24,9 @@ fn parse_line(rl: &mut rustyline::Editor<()>) {
                 if line == "quit" {
                     break
                 } else if line == "run" {
-                    temp();
+                    thread::spawn(move || {
+                        temp();
+                    });
                 } else {
                     println!("{}", line);
                 }
@@ -37,8 +39,8 @@ fn parse_line(rl: &mut rustyline::Editor<()>) {
 }
 
 fn temp() {
-    let num_agents = 5;
-    let num_strats = 3;
+    let num_agents = 11;
+    let num_strats = 10;
     let history_len = 100;
     let iterations = 10_000;
 
@@ -60,7 +62,7 @@ fn temp() {
                 .unwrap(),
         );
     }
-    println!("Prices: ");
+    //println!("Prices: ");
     for t in values {
         match t.join().unwrap() {
             Ok(s) => println!("av: {:.3}\tmax: {}\tmin: {}", s.0, s.1, s.2),
