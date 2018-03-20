@@ -1,9 +1,9 @@
 
 extern crate rustyline;
 
-pub mod lib;
+pub mod minority;
 
-use lib::market::*;
+use minority::market::*;
 use std::thread;
 
 fn main() {
