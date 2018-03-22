@@ -1,5 +1,5 @@
 
-use lib::strategy::Strategy;
+use minority::strategy::Strategy;
 
 // Agent
 #[derive(Debug)]

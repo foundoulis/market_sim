@@ -1,7 +1,7 @@
 
 extern crate rand;
 
-use lib::agent::Agent;
+use minority::agent::Agent;
 use self::rand::{thread_rng, Rng};
 
 // Market
@@ -79,6 +79,9 @@ impl Market {
             self.tick();
         }
         //println!("Prices for era {} to {}: {:?}", self.tick - n, self.tick, self.average_price);
+    }
+    pub fn get_prices(&self) -> Vec<i32> {
+        return self.prices.clone();
     }
     pub fn get_avg_price(&self) -> f64 {
         return self.average_price;
