@@ -10,9 +10,9 @@ use std::thread;
 
 fn main() {
     let num_agents = 11;
-    let num_strats = 10;
+    let num_strats = 3;
     let history_len = 100;
-    let iterations = 10_000;
+    let iterations = 1_000;
 
     let mut values: Vec<std::thread::JoinHandle<Result<(f64, i32, i32, Vec<i32>), ()>>> = Vec::new();
 
@@ -48,19 +48,40 @@ fn main() {
         }
     }
 
-    export(all_prices);
+    export(&all_prices);
 }
 
-fn export(vector: Vec<Vec<i32>>) {
+fn export(vector: &Vec<Vec<i32>>) {
     let mut file = File::create("market_history.csv").unwrap();
     for inner_vec in vector {
+        let mut curr_price: i64 = 0;
         let mut line: String = String::from("");
         for price in inner_vec {
-            line += format!("{}\t", price).as_str();
+            curr_price += *price as i64;
+            line += format!("{}\t", curr_price).as_str();
         }
         line += format!("\n").as_str();
         file.write_all(line.as_bytes());
     }
+    // Create an average line.
+    let mut line: String = String::from("");
+    let length_of_history = vector[0].len();
+    let number_of_markets = vector.len();
+    let mut instant_price: Vec<i64> = Vec::new();
+    for i in 0..number_of_markets {
+        instant_price.push(0);
+    }
+    for x in 0..length_of_history {
+        for i in 0..number_of_markets {
+            instant_price[i] = instant_price[i] + vector[i][x] as i64;
+        }
+        let mut sum: i64 = 0;
+        for i_price in &instant_price {
+            sum += i_price;
+        }
+        line += format!("{}\t", sum/number_of_markets as i64).as_str();
+    }
+    file.write_all(line.as_bytes());
 }
 
 fn give_command_line() -> () {
