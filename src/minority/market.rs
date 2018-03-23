@@ -22,7 +22,7 @@ impl Market {
     pub fn new(number_of_agents: u64, number_of_strategies: u64, history_length: u64) -> Market {
         let mut agentz = Vec::with_capacity(number_of_agents as usize);
         for _ in 0..number_of_agents {
-            agentz.push(Agent::new(number_of_strategies));
+            agentz.push(Agent::new(number_of_strategies, 0.01f64));
         }
         Market {
             num_agents: number_of_agents,

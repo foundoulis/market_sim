@@ -1,3 +1,5 @@
+#![allow(unused_code)]
+
 
 extern crate rustyline;
 
@@ -9,10 +11,10 @@ use std::io::prelude::*;
 use std::thread;
 
 fn main() {
-    let num_agents = 11;
+    let num_agents = 100;
     let num_strats = 3;
     let history_len = 100;
-    let iterations = 1_000;
+    let iterations = 50_000;
 
     let mut values: Vec<std::thread::JoinHandle<Result<(f64, i32, i32, Vec<i32>), ()>>> = Vec::new();
 
@@ -68,7 +70,7 @@ fn export(vector: &Vec<Vec<i32>>) {
     let length_of_history = vector[0].len();
     let number_of_markets = vector.len();
     let mut instant_price: Vec<i64> = Vec::new();
-    for i in 0..number_of_markets {
+    for _ in 0..number_of_markets {
         instant_price.push(0);
     }
     for x in 0..length_of_history {
@@ -103,7 +105,7 @@ fn parse_line(rl: &mut rustyline::Editor<()>) {
                     break
                 } else if line == "run" {
                     thread::spawn(move || {
-                        temp();
+                        //temp();
                     });
                 } else {
                     println!("{}", line);
@@ -114,7 +116,4 @@ fn parse_line(rl: &mut rustyline::Editor<()>) {
             },
         }
     }
-}
-
-fn temp() {
 }
