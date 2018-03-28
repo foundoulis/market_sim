@@ -2,3 +2,6 @@
 **/*.rs.bk
 .vscode/settings.json
 *.csv
+.RData
+.Rhistory
+*.png

@@ -1,4 +1,4 @@
-#![allow(unused_code)]
+#![allow(unused_lints)]
 
 
 extern crate rustyline;
@@ -14,7 +14,7 @@ fn main() {
     let num_agents = 100;
     let num_strats = 3;
     let history_len = 100;
-    let iterations = 50_000;
+    let iterations = 1_000;
 
     let mut values: Vec<std::thread::JoinHandle<Result<(f64, i32, i32, Vec<i32>), ()>>> = Vec::new();
 
@@ -55,7 +55,7 @@ fn main() {
 
 fn export(vector: &Vec<Vec<i32>>) {
     let mut file = File::create("market_history.csv").unwrap();
-    for inner_vec in vector {
+    for (x, inner_vec) in vector.iter().enumerate() {
         let mut curr_price: i64 = 0;
         let mut line: String = String::from("");
         for price in inner_vec {
@@ -63,7 +63,7 @@ fn export(vector: &Vec<Vec<i32>>) {
             line += format!("{}\t", curr_price).as_str();
         }
         line += format!("\n").as_str();
-        file.write_all(line.as_bytes());
+        file.write_all(line.as_bytes()).unwrap_or_else(|_| println!("Failed export at line {}.", x));
     }
     // Create an average line.
     let mut line: String = String::from("");
@@ -83,7 +83,7 @@ fn export(vector: &Vec<Vec<i32>>) {
         }
         line += format!("{}\t", sum/number_of_markets as i64).as_str();
     }
-    file.write_all(line.as_bytes());
+    file.write_all(line.as_bytes()).unwrap_or_else(|_| println!("Failed to export final market average line."));
 }
 
 fn give_command_line() -> () {
