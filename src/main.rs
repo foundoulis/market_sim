@@ -1,6 +1,5 @@
 #![allow(unused_lints)]
 
-
 extern crate rustyline;
 
 pub mod minority;
@@ -16,7 +15,7 @@ fn main() {
     let history_len = 100;
     let iterations = 1_000;
 
-    let mut values: Vec<std::thread::JoinHandle<Result<(f64, i32, i32, Vec<i32>), ()>>> = Vec::new();
+    let mut values: Vec<std::thread::JoinHandle<Result<(f64, i32, i32, Vec<i32>, Vec<i32>), ()>>> = Vec::new();
 
     for i in 0..8 {
         values.push(
@@ -29,14 +28,15 @@ fn main() {
                         mark.get_avg_price(),
                         mark.get_max_price(),
                         mark.get_min_price(),
-                        mark.get_prices(),
+                        mark.get_price_changes(),
+                        mark.get_price_history()
                     ))
                 })
                 .unwrap(),
         );
     }
 
-    let mut all_prices: Vec<Vec<i32>>  = Vec::new();
+    let mut all_prices: Vec<Vec<i32>> = Vec::new();
 
     for t in values {
         match t.join().unwrap() {
@@ -48,14 +48,14 @@ fn main() {
                 println!("There was an error processing the output.", );
             }
         }
-    }
+    }    
 
     export(&all_prices);
 }
 
 fn export(vector: &Vec<Vec<i32>>) {
     let mut file = File::create("market_history.csv").unwrap();
-    for (x, inner_vec) in vector.iter().enumerate() {
+    for (x, inner_vec) in vector.iter().enumerate() { // TODO: Change this loop to a map for simplicity.
         let mut curr_price: i64 = 0;
         let mut line: String = String::from("");
         for price in inner_vec {

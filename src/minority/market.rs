@@ -11,8 +11,8 @@ pub struct Market {
     agents: Vec<Agent>,
     tick: u64,
     hist: MarketHistory,
-
-    prices: Vec<i32>,
+    price_history: Vec<i32>,
+    price_change: Vec<i32>,
     sum: i64,
     average_price: f64,
     max_price: i32,
@@ -22,14 +22,15 @@ impl Market {
     pub fn new(number_of_agents: u64, number_of_strategies: u64, history_length: u64) -> Market {
         let mut agentz = Vec::with_capacity(number_of_agents as usize);
         for _ in 0..number_of_agents {
-            agentz.push(Agent::new(number_of_strategies, 0.01f64));
+            agentz.push(Agent::new(number_of_strategies, 0.0f64));
         }
         Market {
             num_agents: number_of_agents,
             agents: agentz,
             tick: 0,
             hist: MarketHistory::new(number_of_agents, history_length),
-            prices: Vec::new(),
+            price_history: Vec::new(),
+            price_change: Vec::new(),
             sum: 0,
             average_price: 0f64,
             min_price: i32::max_value(),
@@ -54,7 +55,9 @@ impl Market {
         // Append new history
         self.hist.push_hist(&new_history);
         // Append to price history
-        self.prices.push(minority_position);
+        self.price_change.push(minority_position);
+        let last_price = self.price_history.last().unwrap_or(&0).clone();
+        self.price_history.push(minority_position + last_price);
 
         // Determine the minority position based upon market response.
         let minority = if minority_position < 0 { true } else { false };
@@ -78,10 +81,13 @@ impl Market {
         for _ in 0..n {
             self.tick();
         }
-        //println!("Prices for era {} to {}: {:?}", self.tick - n, self.tick, self.average_price);
+        //println!("price_change for era {} to {}: {:?}", self.tick - n, self.tick, self.average_price);
     }
-    pub fn get_prices(&self) -> Vec<i32> {
-        return self.prices.clone();
+    pub fn get_price_changes(&self) -> Vec<i32> {
+        return self.price_change.clone();
+    }
+    pub fn get_price_history(&self) -> Vec<i32> {
+        return self.price_history.clone();
     }
     pub fn get_avg_price(&self) -> f64 {
         return self.average_price;
