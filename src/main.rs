@@ -10,6 +10,10 @@ use std::io::prelude::*;
 use std::thread;
 
 fn main() {
+    
+}
+
+fn main_minority() {
     let num_agents = 100;
     let num_strats = 3;
     let history_len = 100;
