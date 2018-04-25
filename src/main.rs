@@ -3,7 +3,7 @@
 extern crate rustyline;
 
 pub mod minority;
-pub mod network;
+pub mod prediction;
 
 use minority::market::*;
 use std::fs::File;
